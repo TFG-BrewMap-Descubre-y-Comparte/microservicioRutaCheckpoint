@@ -1,6 +1,5 @@
 package com.project.routeCheckpoint.dto;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,20 +15,18 @@ public class CheckpointDTO {
 	
 	private int idCheckpoint;
 	private String nameCheckpoint;
-	private BigDecimal startLatitude;
-	private BigDecimal startLongitude;
-	private BigDecimal endLatitude;
-	private BigDecimal endLongitude;
+	private CoordinatesDTO coordinates;
 	
 	private List<RouteDTO> routesHasCheckpoint = new ArrayList<>();
 	
 	public CheckpointDTO (Checkpoint checkpoint) {
 		this.idCheckpoint = checkpoint.getCheckpointId();
 		this.nameCheckpoint = checkpoint.getNameCheckpoint();
-		this.startLatitude = checkpoint.getStartLatitude();
-		this.endLatitude = checkpoint.getEndLatitude();
-		this.startLongitude = checkpoint.getStartLongitude();
-		this.endLongitude = checkpoint.getEndLongitude();
+		this.coordinates = new CoordinatesDTO();
+        this.coordinates.setStartLatitude(checkpoint.getStartLatitude());
+        this.coordinates.setStartLongitude(checkpoint.getStartLongitude());
+        this.coordinates.setEndLatitude(checkpoint.getEndLatitude());
+        this.coordinates.setEndLongitude(checkpoint.getEndLongitude());
 		
 		for(Route routeCheckpoints : checkpoint.getRoutes()) {
 			RouteDTO route = new RouteDTO(routeCheckpoints);

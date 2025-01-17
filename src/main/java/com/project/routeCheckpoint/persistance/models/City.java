@@ -22,7 +22,7 @@ public class City {
 	@Column(name = "id_city", nullable = false)
 	private int cityId;
 	
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String nameCity;
 	
 	@ManyToOne
