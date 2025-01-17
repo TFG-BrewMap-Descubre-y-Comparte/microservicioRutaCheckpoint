@@ -31,13 +31,22 @@ public class Checkpoint {
 	@Size(min = 2, max = 100, message = "La descripcion debe tener entre 2 y 100 caracteres.")
 	private String nameCheckpoint;
 	
-	@Column(name = "length")
-    @Digits(integer = 3, fraction = 6)
-    private BigDecimal length;
+	@Column(name = "start_latitude")
+	@Digits(integer = 3, fraction = 6)
+	private BigDecimal startLatitude;
 
-    @Column(name = "latitude")
-    @Digits(integer = 3, fraction = 6)
-    private BigDecimal latitude;
+	@Column(name = "start_longitude")
+	@Digits(integer = 3, fraction = 6)
+	private BigDecimal startLongitude;
+
+	@Column(name = "end_latitude")
+	@Digits(integer = 3, fraction = 6)
+	private BigDecimal endLatitude;
+
+	@Column(name = "end_longitude")
+	@Digits(integer = 3, fraction = 6)
+	private BigDecimal endLongitude;
+
     
     @ManyToMany(mappedBy = "checkpoints") 
     private List<Route> routes = new ArrayList<>();
