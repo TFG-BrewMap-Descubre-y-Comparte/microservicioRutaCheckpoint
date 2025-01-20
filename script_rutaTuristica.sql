@@ -52,6 +52,11 @@ CREATE TABLE IF NOT EXISTS `user` (
     rol VARCHAR(50)
 );
 
+INSERT INTO `user` (id_user, name, email, username, password, rol) 
+VALUES 
+(1, 'Miguel Ángel', 'miguelangel@email.com', 'miguelangel', 'Abcd123', 'user');
+
+
 -- Tabla Route
 CREATE TABLE IF NOT EXISTS `route` (
     id_route INT AUTO_INCREMENT PRIMARY KEY,
