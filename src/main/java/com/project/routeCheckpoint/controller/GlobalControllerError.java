@@ -13,7 +13,7 @@ import com.project.routeCheckpoint.persistance.models.ApiError;
 public class GlobalControllerError {
 	
 	@ExceptionHandler(ExceptionNotValidData.class)
-	 public ResponseEntity<ApiError> invalidProjectData(ExceptionNotValidData e) {
+	 public ResponseEntity<ApiError> notValidData(ExceptionNotValidData e) {
 	     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
 	     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
 	}

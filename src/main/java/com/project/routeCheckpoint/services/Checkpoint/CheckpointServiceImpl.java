@@ -16,6 +16,7 @@ import com.project.routeCheckpoint.dto.CheckpointDTO;
 import com.project.routeCheckpoint.dto.CoordinatesDTO;
 import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCity;
 import com.project.routeCheckpoint.exceptions.ExceptionNotValidData;
+import com.project.routeCheckpoint.exceptions.ExceptionRoutNotFound;
 import com.project.routeCheckpoint.persistance.models.Checkpoint;
 import com.project.routeCheckpoint.persistance.models.City;
 import com.project.routeCheckpoint.persistance.models.Response;
@@ -143,8 +144,7 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 			Optional<Route> routeOptional = routeRepository.findById(routeId);
 
 			if (!routeOptional.isPresent()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new Response<>(HttpStatus.NOT_FOUND, "Route not found"));
+				throw new ExceptionRoutNotFound ("Route not found");
 			}
 
 			Route route = routeOptional.get();
@@ -154,13 +154,10 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 				checkpoint.getRoutes().remove(route);
 			}
 
-			route.getCheckpoints().clear();
-			routeRepository.save(route);
-
 			// Eliminar la ruta de la base de datos
 			routeRepository.delete(route);
 
-			Response<String> response = new Response<>(HttpStatus.OK, "Route saved correctly");
+			Response<String> response = new Response<>(HttpStatus.OK, "Route deleted correctly");
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage()));
