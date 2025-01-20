@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,12 +51,12 @@ public class Route {
     @Column(name = "id_user", nullable = false)
     private int userId;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_city", referencedColumnName = "id_city", nullable = false)
     private City city;
     
     @ManyToMany
     @JoinTable(name="route_checkpoint", joinColumns= {@JoinColumn(name="id_route")}, inverseJoinColumns={@JoinColumn(name="id_checkpoint")})
-    private List<Checkpoint> checkpoints = new ArrayList<>();;
+    private List<Checkpoint> checkpoints = new ArrayList<>();
 
 }

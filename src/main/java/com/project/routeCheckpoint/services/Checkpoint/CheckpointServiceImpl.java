@@ -135,4 +135,39 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 	    }
 	}
 
+
+	@Override
+	public ResponseEntity<Response<String>> deleteRoute(Integer routeId) {
+		try {
+			// Buscar la ruta por ID
+			Optional<Route> routeOptional = routeRepository.findById(routeId);
+
+			if (!routeOptional.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new Response<>(HttpStatus.NOT_FOUND, "Route not found"));
+			}
+
+			Route route = routeOptional.get();
+
+			// Desvincular los checkpoints de la ruta
+			for (Checkpoint checkpoint : route.getCheckpoints()) {
+				checkpoint.getRoutes().remove(route);
+			}
+
+			route.getCheckpoints().clear();
+			routeRepository.save(route);
+
+			// Eliminar la ruta de la base de datos
+			routeRepository.delete(route);
+
+			Response<String> response = new Response<>(HttpStatus.OK, "Route saved correctly");
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage()));
+		}
+	}
+
+	
+
+
 }
