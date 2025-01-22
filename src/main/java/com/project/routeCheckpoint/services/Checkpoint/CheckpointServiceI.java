@@ -10,5 +10,6 @@ public interface CheckpointServiceI {
 	
 	ResponseEntity<Response<Checkpoint>> addRoute(CoordinatesDTO coordinatesDTO);
 	public ResponseEntity<Response<String>> deleteRoute(Integer routeId);
+	
 
 }

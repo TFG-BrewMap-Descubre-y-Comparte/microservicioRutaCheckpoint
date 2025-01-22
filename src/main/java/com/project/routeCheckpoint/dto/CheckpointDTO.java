@@ -1,10 +1,7 @@
 package com.project.routeCheckpoint.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import com.project.routeCheckpoint.persistance.models.Checkpoint;
-import com.project.routeCheckpoint.persistance.models.Route;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,6 @@ public class CheckpointDTO {
 	private String nameCheckpoint;
 	private CoordinatesDTO coordinates;
 	
-	private List<RouteDTO> routesHasCheckpoint = new ArrayList<>();
 	
 	public CheckpointDTO (Checkpoint checkpoint) {
 		this.idCheckpoint = checkpoint.getCheckpointId();
@@ -28,10 +24,6 @@ public class CheckpointDTO {
         this.coordinates.setEndLatitude(checkpoint.getEndLatitude());
         this.coordinates.setEndLongitude(checkpoint.getEndLongitude());
 		
-		for(Route routeCheckpoints : checkpoint.getRoutes()) {
-			RouteDTO route = new RouteDTO(routeCheckpoints);
-			routesHasCheckpoint.add(route);
-		}
 	}
 	
 
