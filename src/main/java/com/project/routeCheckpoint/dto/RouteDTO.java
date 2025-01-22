@@ -39,8 +39,7 @@ public class RouteDTO {
     	for(Checkpoint checkpointRoutes : route.getCheckpoints()) {
     		CheckpointDTO checkpoint = new CheckpointDTO(checkpointRoutes);
     		checkpointHasRoute.add(checkpoint);
-    	}
-    	
+    	}	
     }
 
 }
