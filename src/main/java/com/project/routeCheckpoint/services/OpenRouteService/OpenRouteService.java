@@ -23,19 +23,14 @@ public class OpenRouteService {
         this.webClient = webClientBuilder.baseUrl("https://api.openrouteservice.org").build();
     }
     
-    public Mono<String> getWalkingRoute(CoordinatesDTO coordinatesDTO) {
-        if (coordinatesDTO == null || coordinatesDTO.getCheckpoints() == null || coordinatesDTO.getCheckpoints().isEmpty()) {
-            throw new IllegalArgumentException("CoordinatesDTO or Checkpoints list cannot be null or empty");
-        }
+    public Mono<String> getWalkingRoute(CoordinatesDTO startCoordinates, CoordinatesDTO endCoordinates) {
 
-        CheckpointDTO firstCheckpoint = coordinatesDTO.getCheckpoints().get(0);
-        CheckpointDTO lastCheckpoint = coordinatesDTO.getCheckpoints().get(coordinatesDTO.getCheckpoints().size() - 1);
 
-        String url = "/v2/directions/foot-walking" +
+    	String url = "/v2/directions/foot-walking" +
                 "?api_key=" + apiKey +
-                "&start=" + firstCheckpoint.getCoordinates().getStartLongitude() + "," + firstCheckpoint.getCoordinates().getStartLatitude() +
-                "&end=" + lastCheckpoint.getCoordinates().getEndLongitude() + "," + lastCheckpoint.getCoordinates().getEndLatitude();
-
+                "&start=" + startCoordinates.getStartLongitude() + "," + startCoordinates.getStartLatitude() +
+                "&end=" + endCoordinates.getEndLongitude() + "," + endCoordinates.getEndLatitude();
+        
         return this.webClient.get()
         .uri(url)
         .retrieve()
@@ -51,8 +46,6 @@ public class OpenRouteService {
                 double distance = summaryNode.path("distance").asDouble();
                 double duration = summaryNode.path("duration").asDouble();
 
-                System.out.println("Total distance: " + distance + " meters");
-                System.out.println("Total duration: " + duration + " seconds");
             } catch (Exception e) {
                 System.out.println("Error parsing the route data: " + e.getMessage());
             }

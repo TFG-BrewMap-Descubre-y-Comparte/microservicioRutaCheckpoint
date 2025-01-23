@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.routeCheckpoint.dto.CheckpointDTO;
 import com.project.routeCheckpoint.dto.CoordinatesDTO;
+import com.project.routeCheckpoint.dto.RouteWithCheckpointsDTO;
 import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCity;
 import com.project.routeCheckpoint.exceptions.ExceptionNotValidData;
 import com.project.routeCheckpoint.exceptions.ExceptionRoutNotFound;
@@ -42,47 +43,40 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
     private OpenRouteService openRouteService;
 
 	@Override
-	public ResponseEntity<Response<Checkpoint>> addRoute(CoordinatesDTO coordinatesDTO) {
+	public ResponseEntity<Response<Checkpoint>> addRoute(RouteWithCheckpointsDTO routeWithCheckpointsDTO) {
 		
 		try {
-			 if (coordinatesDTO == null) {
-		            throw new ExceptionNotValidData("CoordinatesDTO cannot be null.");
+			if (routeWithCheckpointsDTO == null) {
+	            throw new ExceptionNotValidData("RouteDTO cannot be null.");
 	        }
 
-	        if (coordinatesDTO.getCheckpoints() == null || coordinatesDTO.getCheckpoints().isEmpty()) {
-	            throw new ExceptionNotValidData("Checkpoints cannot be null or empty.");
+			 // Validar que los checkpoints no estén vacíos
+	        if (routeWithCheckpointsDTO.getCheckpoints() == null || routeWithCheckpointsDTO.getCheckpoints().isEmpty()) {
+	            throw new ExceptionNotValidData("Route must have at least one checkpoint.");
 	        }
-
-	        for (CheckpointDTO checkpointDTO : coordinatesDTO.getCheckpoints()) {
-	            if (checkpointDTO.getCoordinates() == null) {
-	                throw new ExceptionNotValidData("Coordinates cannot be null for checkpoint");
-	            }
-
-	            if (checkpointDTO.getCoordinates().getStartLatitude() == null || checkpointDTO.getCoordinates().getStartLongitude() == null ||
-	                checkpointDTO.getCoordinates().getEndLatitude() == null || checkpointDTO.getCoordinates().getEndLongitude() == null) {
-	                throw new ExceptionNotValidData("Coordinates are incomplete.");
-	            }
-	        }	        
 	        
-	        Route route = new Route();   
-        
-	        route.setName(coordinatesDTO.getNameRoute());
-	        route.setDescription(coordinatesDTO.getDescriptionRoute());
+	        String cityName = routeWithCheckpointsDTO.getCityName();
+	        Optional<City> optionalCity = cityRepository.findByNameCity(cityName);
+	        if (!optionalCity.isPresent()) {
+	            throw new ExceptionNotFoundCity("City name not found.");
+	        }
+	        
+	        City city = optionalCity.get();
+	           
+	        // Crear la entidad Route
+	        Route route = new Route();
+	        route.setName(routeWithCheckpointsDTO.getNameRoute());
+	        route.setDescription(routeWithCheckpointsDTO.getDescriptionRoute());
+	        route.setCity(city);
 	        route.setCreatedDate(new java.sql.Date(System.currentTimeMillis()));
 	        route.setUserId(1);
 	        
-	        Optional<City> cityOptional = cityRepository.findByNameCity(coordinatesDTO.getCityName());
-	        
-	        if(!cityOptional.isPresent()) {
-	        	throw new ExceptionNotFoundCity("City not found");
-	        }
-	        
-	        City city = cityOptional.get();
-	        route.setCity(city);
-
-	        
+	        // Obtener las coordenadas iniciales y finales de los checkpoints
+	        CoordinatesDTO startCoordinates = routeWithCheckpointsDTO.getCheckpoints().get(0).getCoordinates();
+	        CoordinatesDTO endCoordinates = routeWithCheckpointsDTO.getCheckpoints().get(routeWithCheckpointsDTO.getCheckpoints().size() - 1).getCoordinates();
+ 
 	        // Llamada al servicio OpenRouteService para obtener la ruta
-	        String routeData = openRouteService.getWalkingRoute(coordinatesDTO).block();
+	        String routeData = openRouteService.getWalkingRoute(startCoordinates, endCoordinates).block();
 	        //System.out.println(routeData);
 	        
 	        ObjectMapper mapper = new ObjectMapper();
@@ -104,10 +98,10 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 		     // Asignar valores a la ruta
 		     route.setDistance(distanceInKm); 
 		     route.setDuration(durationTime);
-	        
-	        // Añadir los checkpoints a la lista de la ruta
+		     
+		     // Guardar los checkpoints y asociarlos a la ruta
 	        List<Checkpoint> checkpointList = new ArrayList<>();
-	        for (CheckpointDTO checkpointDTO : coordinatesDTO.getCheckpoints()) {
+	        for (CheckpointDTO checkpointDTO : routeWithCheckpointsDTO.getCheckpoints()) {
 	            Checkpoint checkpoint = new Checkpoint();
 	            checkpoint.setNameCheckpoint(checkpointDTO.getNameCheckpoint());
 	            checkpoint.setStartLatitude(checkpointDTO.getCoordinates().getStartLatitude());
@@ -115,16 +109,15 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 	            checkpoint.setEndLatitude(checkpointDTO.getCoordinates().getEndLatitude());
 	            checkpoint.setEndLongitude(checkpointDTO.getCoordinates().getEndLongitude());
 
-	            // Guardar el checkpoint en la base de datos
-	            checkpointRepository.save(checkpoint);
-
-	            // Agregar el checkpoint a la lista de la ruta
+	            // Guardar el checkpoint y agregarlo a la lista de la ruta
+	            checkpoint = checkpointRepository.save(checkpoint);
 	            checkpointList.add(checkpoint);
 	        }
-	        
+		     	
+	        // Asociar los checkpoints a la ruta
 	        route.setCheckpoints(checkpointList);
-	        
-	        // Guardar la ruta en el repositorio
+
+	        // Guardar la ruta con los checkpoints
 	        routeRepository.save(route);
 
 	        // Crear la respuesta

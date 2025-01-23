@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.routeCheckpoint.dto.CoordinatesDTO;
+import com.project.routeCheckpoint.dto.RouteWithCheckpointsDTO;
 import com.project.routeCheckpoint.persistance.models.Checkpoint;
 import com.project.routeCheckpoint.persistance.models.Response;
 import com.project.routeCheckpoint.services.Checkpoint.CheckpointServiceI;
@@ -26,8 +26,8 @@ public class CheckpointController {
 	private CheckpointServiceI checkpointService;
 	
 	@PostMapping("/route")
-	public ResponseEntity<Response<Checkpoint>> addRoute (@Valid @RequestBody CoordinatesDTO coordinates){
-		return checkpointService.addRoute(coordinates);
+	public ResponseEntity<Response<Checkpoint>> addRoute (@Valid @RequestBody RouteWithCheckpointsDTO routeWithCheckpointsDTO){
+		return checkpointService.addRoute(routeWithCheckpointsDTO);
 	}
 
 	@DeleteMapping("/route/{routeId}")
