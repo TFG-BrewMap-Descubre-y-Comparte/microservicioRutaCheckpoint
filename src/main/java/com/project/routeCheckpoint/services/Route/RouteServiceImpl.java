@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.routeCheckpoint.dto.RouteDTO;
 import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCity;
+import com.project.routeCheckpoint.exceptions.ExceptionRoutNotFound;
 import com.project.routeCheckpoint.persistance.models.City;
 import com.project.routeCheckpoint.persistance.models.Route;
 import com.project.routeCheckpoint.persistance.repository.CityRepository;
@@ -55,6 +56,20 @@ public class RouteServiceImpl implements RouteServiceI{
 		}
 		
 		return listRoutesDTO;
+	}
+
+	@Override
+	public RouteDTO findRoutById(int routeId) {
+		
+		Optional<Route> optionalRoute = routeRepository.findById(routeId);
+		
+		if(!optionalRoute.isPresent()) {
+			throw new ExceptionRoutNotFound ("The route with the name of city not found");
+		}
+		Route route = optionalRoute.get();
+		RouteDTO routedto = new RouteDTO(route);
+		
+		return routedto;
 	}
 
 }

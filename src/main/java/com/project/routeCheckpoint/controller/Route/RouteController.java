@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.routeCheckpoint.dto.RouteDTO;
+import com.project.routeCheckpoint.persistance.models.Route;
 import com.project.routeCheckpoint.services.Route.RouteServiceI;
 
 @RestController
@@ -25,9 +26,14 @@ public class RouteController {
 		return routeService.routes();
 	}
 	
-	@GetMapping("/routes/{nameCity}")
+	@GetMapping("/routes/city/{nameCity}")
 	public List<RouteDTO> getAllRoutesByCity(@PathVariable String nameCity){
 		return routeService.findRoutesByCity(nameCity);
+	}
+	
+	@GetMapping("/routes/id/{id}")
+	public RouteDTO getRouteByID(@PathVariable int id) {
+		return routeService.findRoutById(id);
 	}
 
 }
