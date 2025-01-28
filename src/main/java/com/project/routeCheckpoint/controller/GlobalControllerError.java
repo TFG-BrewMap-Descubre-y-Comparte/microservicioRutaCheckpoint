@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCheckpoint;
 import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCity;
 import com.project.routeCheckpoint.exceptions.ExceptionNotValidData;
 import com.project.routeCheckpoint.exceptions.ExceptionRoutNotFound;
@@ -27,6 +28,12 @@ public class GlobalControllerError {
 	 
 	 @ExceptionHandler(ExceptionNotFoundCity.class)
 	 public ResponseEntity<ApiError> handleCityNotFoundException(ExceptionNotFoundCity e) {
+	      ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getMessage());
+	      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+	 }
+	 
+	 @ExceptionHandler(ExceptionNotFoundCheckpoint.class)
+	 public ResponseEntity<ApiError> handleCheckpointNotFoundException(ExceptionNotFoundCheckpoint e) {
 	      ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getMessage());
 	      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
 	 }

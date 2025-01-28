@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.routeCheckpoint.dto.CheckpointDTO;
 import com.project.routeCheckpoint.dto.RouteWithCheckpointsDTO;
 import com.project.routeCheckpoint.persistance.models.Checkpoint;
 import com.project.routeCheckpoint.persistance.models.Response;
@@ -34,5 +36,10 @@ public class CheckpointController {
     public ResponseEntity<Response<String>> deleteRoute(@PathVariable Integer routeId) {
         return checkpointService.deleteRoute(routeId);
     }
+	
+	@GetMapping("/checkpoint/{checkpointId}")
+	public CheckpointDTO getCheckpointByID(@PathVariable int checkpointId) {
+		return checkpointService.findCheckpointByID(checkpointId);
+	}
 
 }

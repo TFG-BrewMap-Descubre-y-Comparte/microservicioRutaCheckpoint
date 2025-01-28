@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.routeCheckpoint.dto.CheckpointDTO;
 import com.project.routeCheckpoint.dto.CoordinatesDTO;
 import com.project.routeCheckpoint.dto.RouteWithCheckpointsDTO;
+import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCheckpoint;
 import com.project.routeCheckpoint.exceptions.ExceptionNotFoundCity;
 import com.project.routeCheckpoint.exceptions.ExceptionNotValidData;
 import com.project.routeCheckpoint.exceptions.ExceptionRoutNotFound;
@@ -155,6 +156,21 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage()));
 		}
+	}
+
+
+	@Override
+	public CheckpointDTO findCheckpointByID(int checkpointId) {
+		Optional<Checkpoint> optionalCheckpoint = checkpointRepository.findById(checkpointId);
+		
+		if(!optionalCheckpoint.isPresent()) {
+			throw new ExceptionNotFoundCheckpoint("The checkpoint not found");
+		}
+		
+		Checkpoint checkpoint = optionalCheckpoint.get();
+		
+		CheckpointDTO checkpointDTO = new CheckpointDTO(checkpoint);	
+		return checkpointDTO;
 	}
 
 	
