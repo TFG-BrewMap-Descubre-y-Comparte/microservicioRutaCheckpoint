@@ -42,7 +42,7 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 	
 	@Autowired
     private OpenRouteService openRouteService;
-
+	
 	@Override
 	public ResponseEntity<Response<Checkpoint>> addRoute(RouteWithCheckpointsDTO routeWithCheckpointsDTO) {
 		
@@ -172,10 +172,5 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 		CheckpointDTO checkpointDTO = new CheckpointDTO(checkpoint);	
 		return checkpointDTO;
 	}
-	
-	
-
-	
-
 
 }

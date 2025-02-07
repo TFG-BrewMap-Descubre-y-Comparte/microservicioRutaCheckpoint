@@ -13,6 +13,7 @@ public class CheckpointDTO {
 	private int idCheckpoint;
 	private String nameCheckpoint;
 	private CoordinatesDTO coordinates;
+	private AudioguiaDTO audioguiaDTO;
 	
 	
 	public CheckpointDTO (Checkpoint checkpoint) {
