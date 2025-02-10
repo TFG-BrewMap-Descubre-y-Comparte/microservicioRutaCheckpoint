@@ -31,7 +31,7 @@ public class RouteController {
 		return routeService.findRoutesByCity(nameCity);
 	}
 	
-	@GetMapping("/routes/id/{id}")
+	@GetMapping("/routes/{id}")
 	public RouteDTO getRouteByID(@PathVariable int id) {
 		return routeService.findRoutById(id);
 	}
