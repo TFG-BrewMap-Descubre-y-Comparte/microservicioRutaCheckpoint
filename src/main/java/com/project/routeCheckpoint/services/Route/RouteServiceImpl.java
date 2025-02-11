@@ -64,7 +64,10 @@ public class RouteServiceImpl implements RouteServiceI{
 		List<RouteDTO> listRoutesDTO = new ArrayList<>();
 		
 		for(Route route : routes){
-			listRoutesDTO.add(new RouteDTO(route));
+			RouteDTO routeDTO = new RouteDTO(route);
+			
+			routeDTO.setCheckpointHasRoute(getCheckpointsWithAudioguide(route.getCheckpoints()));
+			listRoutesDTO.add(routeDTO);
 		}
 		
 		return listRoutesDTO;
@@ -81,7 +84,7 @@ public class RouteServiceImpl implements RouteServiceI{
 	            // Llamada al microservicio de audioguías
 	            List<AudioguiaDTO> audioguias = webClient
 	                    .get()
-	                    .uri("/audioguide/checkpoint/{id_checkpoint}", checkpoint.getCheckpointId())
+	                    .uri("/audioguides/checkpoint/{id_checkpoint}", checkpoint.getCheckpointId())
 	                    .retrieve()
 	                    .bodyToFlux(AudioguiaDTO.class)
 	                    .collectList()
