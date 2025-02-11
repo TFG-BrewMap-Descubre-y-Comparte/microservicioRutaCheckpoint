@@ -89,12 +89,19 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 
 	        float distanceInKm = (float) (distance / 1000); // Convertir metros a kilómetros
 
+	        long durationInSeconds = (long) duration;
+	        
 		     // Convertir duración de segundos a minutos y segundos
-		     int minutes = (int) (duration / 60);
-		     int seconds = (int) (duration % 60);
+	        int hours = (int) (durationInSeconds / 3600);  // Calcular horas
+	        int minutes = (int) ((durationInSeconds % 3600) / 60);  // Calcular minutos
+	        int seconds = (int) (durationInSeconds % 60);  // Calcular segundos
 	
-		     // Crear LocalTime con la duración
-		     LocalTime durationTime = LocalTime.of(minutes, seconds);
+		     if (minutes >= 60) {
+		    	    minutes = minutes % 60;
+		    	}
+	
+		    	// Crear LocalTime con las horas, minutos y segundos
+		    	LocalTime durationTime = LocalTime.of(hours, minutes, seconds);
 	
 		     // Asignar valores a la ruta
 		     route.setDistance(distanceInKm); 
