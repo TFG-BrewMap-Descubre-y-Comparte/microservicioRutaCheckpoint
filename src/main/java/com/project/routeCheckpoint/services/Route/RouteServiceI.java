@@ -10,6 +10,7 @@ public interface RouteServiceI {
 	
 	List<RouteDTO>routes();
 	List<RouteDTO> findRoutesByCity(String cityName);
+	List<RouteDTO> findRoutesByCityAndCategory(String nameCity, String category);
 	RouteDTO findRoutById(int routeId);
 
 

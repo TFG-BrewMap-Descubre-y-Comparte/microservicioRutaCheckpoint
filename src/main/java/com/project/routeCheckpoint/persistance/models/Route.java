@@ -47,6 +47,9 @@ public class Route {
     @Column(name = "created_date")
     private Date createdDate;
     
+    @Column(name = "category")
+    private String category;
+    
     //Relación con User microservicio
     @Column(name = "id_user", nullable = false)
     private int userId;

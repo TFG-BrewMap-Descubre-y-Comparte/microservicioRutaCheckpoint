@@ -71,6 +71,9 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 	        route.setCity(city);
 	        route.setCreatedDate(new java.sql.Date(System.currentTimeMillis()));
 	        route.setUserId(1);
+	        route.setCategory(routeWithCheckpointsDTO.getCategory());
+	        
+
 	        
 	        // Obtener las coordenadas iniciales y finales de los checkpoints
 	        CoordinatesDTO startCoordinates = routeWithCheckpointsDTO.getCheckpoints().get(0).getCoordinates();
@@ -116,6 +119,7 @@ public class CheckpointServiceImpl implements CheckpointServiceI{
 	            checkpoint.setStartLongitude(checkpointDTO.getCoordinates().getStartLongitude());
 	            checkpoint.setEndLatitude(checkpointDTO.getCoordinates().getEndLatitude());
 	            checkpoint.setEndLongitude(checkpointDTO.getCoordinates().getEndLongitude());
+	            checkpoint.setSchedule(checkpointDTO.getSchedule());
 
 	            // Guardar el checkpoint y agregarlo a la lista de la ruta
 	            checkpoint = checkpointRepository.save(checkpoint);

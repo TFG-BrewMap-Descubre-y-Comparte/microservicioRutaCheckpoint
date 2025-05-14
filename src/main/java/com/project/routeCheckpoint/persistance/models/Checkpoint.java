@@ -46,6 +46,10 @@ public class Checkpoint {
 	@Column(name = "end_longitude")
 	@Digits(integer = 3, fraction = 6)
 	private BigDecimal endLongitude;
+	
+	@Column(name = "schedule", nullable = true)
+	private String schedule;
+
 
     
     @ManyToMany(mappedBy = "checkpoints") 

@@ -130,4 +130,25 @@ public class RouteServiceImpl implements RouteServiceI{
 		return routedto;
 	}
 
+	@Override
+	public List<RouteDTO> findRoutesByCityAndCategory(String nameCity, String category) {
+	    Optional<City> optionalCity = cityRepository.findByNameCity(nameCity);
+
+	    if (!optionalCity.isPresent()) {
+	        throw new ExceptionNotFoundCity("The city with the name '" + nameCity + "' was not found.");
+	    }
+
+	    City city = optionalCity.get();
+	    List<Route> routes = routeRepository.findByCityAndCategory(city, category);
+	    List<RouteDTO> listRoutesDTO = new ArrayList<>();
+
+	    for (Route route : routes) {
+	        RouteDTO routeDTO = new RouteDTO(route);
+	        routeDTO.setCheckpointHasRoute(getCheckpointsWithAudioguide(route.getCheckpoints()));
+	        listRoutesDTO.add(routeDTO);
+	    }
+
+	    return listRoutesDTO;
+	}
+
 }

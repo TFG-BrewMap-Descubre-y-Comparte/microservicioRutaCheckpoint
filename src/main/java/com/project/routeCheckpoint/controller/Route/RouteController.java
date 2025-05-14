@@ -31,6 +31,12 @@ public class RouteController {
 		return routeService.findRoutesByCity(nameCity);
 	}
 	
+	@GetMapping("/routes/city/{nameCity}/category/{category}")
+	public List<RouteDTO> getRoutesByCityAndCategory(@PathVariable String nameCity, @PathVariable String category) {
+	    return routeService.findRoutesByCityAndCategory(nameCity, category);
+	}
+
+	
 	@GetMapping("/routes/{id}")
 	public RouteDTO getRouteByID(@PathVariable int id) {
 		return routeService.findRoutById(id);

@@ -12,6 +12,8 @@ public class RouteWithCheckpointsDTO {
     private String nameRoute;
     private String descriptionRoute;
     private String cityName; 
+    private String category;
+
 
     private List<CheckpointDTO> checkpoints;
 

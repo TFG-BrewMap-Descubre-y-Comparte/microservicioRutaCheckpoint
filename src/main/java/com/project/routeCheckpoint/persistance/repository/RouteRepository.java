@@ -11,4 +11,6 @@ import com.project.routeCheckpoint.persistance.models.Route;
 public interface RouteRepository extends JpaRepository<Route, Integer>{
     Optional<Route> findByName(String name);
     List<Route> findByCity(City city);
+    List<Route> findByCityAndCategory(City city, String category);
+
 }

@@ -23,6 +23,7 @@ public class RouteDTO {
     private Date createdDate;
     private int idUser;
     private CityDTO city;
+    private String category;
     
     private List<CheckpointDTO> checkpointHasRoute = new ArrayList<>();
     
@@ -30,6 +31,7 @@ public class RouteDTO {
     	this.idRoute = route.getRouteId();
     	this.nameRoute = route.getName();
     	this.description = route.getDescription();
+    	this.category = route.getCategory();
     	this.duration = route.getDuration();
     	this.distance = route.getDistance();
     	this.createdDate = route.getCreatedDate();

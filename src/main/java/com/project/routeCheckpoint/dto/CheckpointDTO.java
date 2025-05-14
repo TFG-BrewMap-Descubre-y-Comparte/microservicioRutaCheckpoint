@@ -13,6 +13,7 @@ public class CheckpointDTO {
 	private int idCheckpoint;
 	private String nameCheckpoint;
 	private CoordinatesDTO coordinates;
+	private String schedule;
 	private AudioguiaDTO audioguiaDTO;
 	
 	
@@ -24,6 +25,7 @@ public class CheckpointDTO {
         this.coordinates.setStartLongitude(checkpoint.getStartLongitude());
         this.coordinates.setEndLatitude(checkpoint.getEndLatitude());
         this.coordinates.setEndLongitude(checkpoint.getEndLongitude());
+        this.schedule = checkpoint.getSchedule();
 		
 	}
 	
